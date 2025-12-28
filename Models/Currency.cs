@@ -21,5 +21,8 @@ namespace CryptoViewer.Models
 
         [JsonPropertyName("total_volume")]
         public decimal? TotalVolume { get; set; }
+
+        [JsonPropertyName("image")]
+        public string ImageUrl { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace CryptoViewer.ViewModels
         private List<Currency> _allCurrencies = new List<Currency>();
         private string _searchText = string.Empty;
         private object _currentViewModel;
+        public ICommand OpenConverterCommand { get; }
 
         public ObservableCollection<Currency> Currencies { get; } = new ObservableCollection<Currency>();
 
@@ -41,10 +42,16 @@ namespace CryptoViewer.ViewModels
             _coinService = coinService;
 
             OpenCurrencyDetailCommand = new RelayCommand<Currency>(OpenCurrencyDetail);
+            OpenConverterCommand = new RelayCommand<Currency>(_ => OpenConverter());
             GoBackCommand = new RelayCommand<object>(_ => ShowMainPage());
 
             CurrentViewModel = this;
             _ = LoadCurrenciesAsync();
+        }
+
+        private void OpenConverter()
+        {
+            CurrentViewModel = new ConverterViewModel(Currencies, GoBackCommand);
         }
 
         public void ShowMainPage()

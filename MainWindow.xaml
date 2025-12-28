@@ -13,6 +13,10 @@
         <DataTemplate DataType="{x:Type vm:CurrencyDetailViewModel}">
             <v:CurrencyDetailPage />
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:ConverterViewModel}">
+            <v:ConverterPage />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
