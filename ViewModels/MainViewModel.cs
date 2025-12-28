@@ -83,7 +83,7 @@ namespace CryptoViewer.ViewModels
         {
             if (currency != null)
             {
-                CurrentViewModel = new CurrencyDetailViewModel(currency, GoBackCommand);
+                CurrentViewModel = new CurrencyDetailViewModel(currency, GoBackCommand, _coinService);
             }
         }
     }

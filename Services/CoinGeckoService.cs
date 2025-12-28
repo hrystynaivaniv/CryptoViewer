@@ -40,5 +40,15 @@ namespace CryptoViewer.Services
                 throw new Exception("Data can not be loaded from CoinGecko", ex);
             }
         }
+
+        public async Task<List<double[]>> GetCoinHistoryAsync(string id, int days)
+        {
+            var url = $"https://api.coingecko.com/api/v3/coins/{id}/market_chart?vs_currency=usd&days={days}";
+            var response = await _httpClient.GetStringAsync(url);
+
+            using var doc = JsonDocument.Parse(response);
+            var prices = doc.RootElement.GetProperty("prices").Deserialize<List<double[]>>();
+            return prices;
+        }
     }
 }

@@ -5,5 +5,7 @@ namespace CryptoViewer.Services
     public interface ICoinService
     {
         public Task<List<Currency>> GetTopCurrenciesAsync();
+
+        public Task<List<double[]>> GetCoinHistoryAsync(string id, int days);
     }
 }
