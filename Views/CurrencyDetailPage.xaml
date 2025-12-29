@@ -4,63 +4,90 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:oxy="http://oxyplot.org/wpf"
-             mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="800">
-    <Grid Margin="20">
-        <StackPanel>
-            <Button Content="Back to List" 
-                    Command="{Binding BackCommand}" 
-                    HorizontalAlignment="Left" 
-                    Padding="10,5" 
-                    Cursor="Hand"/>
+             mc:Ignorable="d" d:DesignHeight="700" d:DesignWidth="800"
+             Background="White">
 
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,10">
-                <Image Source="{Binding Currency.ImageUrl}" Width="40" Height="40" Margin="0,0,10,0"/>
-                <TextBlock Text="{Binding Name}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding Symbol}" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="Gray"/>
-            </StackPanel>
+    <UserControl.Resources>
 
-            <Border BorderBrush="#EEE" BorderThickness="0,0,0,1" Padding="0,0,0,10">
-                <StackPanel>
-                    <TextBlock Text="{Binding PriceDisplay}" FontSize="22" FontWeight="SemiBold"/>
-                    <TextBlock Text="{Binding ChangeDisplay}" Foreground="{Binding ChangeColor}" FontSize="18" Margin="0,5"/>
-                    <TextBlock Text="{Binding VolumeDisplay}" FontSize="16" Foreground="DimGray"/>
-                </StackPanel>
-            </Border>
-
-            <TextBlock Text="Price History (Last 7 Days)" Margin="0,20,0,5" FontWeight="Bold" FontSize="16"/>
-            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Height="300" Background="White">
-                <oxy:PlotView Model="{Binding ChartModel}" 
-                              Background="Transparent"/>
-            </Border>
-
-            <TextBlock Text="Available Markets" Margin="0,20,0,5" FontWeight="Bold" FontSize="16"/>
-            <ItemsControl ItemsSource="{Binding Markets}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="5" Margin="0,2" Padding="10">
-                            <Grid>
-                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Medium"/>
-
-                                <Button Content="Go to Trade →" 
-                            Command="{Binding DataContext.OpenMarketCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                            CommandParameter="{Binding TradeUrl}" 
-                            HorizontalAlignment="Right"
-                            Foreground="Blue"
-                            Cursor="Hand"
-                            Background="Transparent"
-                            BorderThickness="0">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                            </Grid>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#28a745"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 
-        </StackPanel>
-    </Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="25">
+            <StackPanel>
+                <Button Content="Back to List" 
+                        Command="{Binding BackCommand}" 
+                        Style="{StaticResource ButtonStyle}"
+                        Margin="0,0,0,20"/>
+
+                <Border Background="White" CornerRadius="15" Padding="20" Margin="0,0,0,20" BorderBrush="WhiteSmoke" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="{Binding Currency.ImageUrl}" Width="60" Height="60" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" FontSize="28" FontWeight="ExtraBold" Foreground="Black"/>
+                                <TextBlock Text="{Binding Symbol}" FontSize="20" Foreground="Gray" Margin="10,0,0,0" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding VolumeDisplay}" FontSize="14" Foreground="Gray" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding PriceDisplay}" FontSize="32" FontWeight="ExtraBold" Foreground="Black"/>
+                            <TextBlock Text="{Binding ChangeDisplay}" Foreground="{Binding ChangeColor}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="Price History (7 Days)" FontSize="18" FontWeight="Bold" Margin="5,0,0,10" Foreground="Black"/>
+                <Border Background="White" CornerRadius="15" Padding="15" Height="350" BorderBrush="WhiteSmoke" BorderThickness="1" Margin="0,0,0,25">
+                    <oxy:PlotView Model="{Binding ChartModel}" Background="Transparent"/>
+                </Border>
+
+                <TextBlock Text="Available Markets" FontSize="18" FontWeight="Bold" Margin="5,0,0,10" Foreground="#1A1A1A"/>
+                <ItemsControl ItemsSource="{Binding Markets}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White" CornerRadius="10" Margin="0,0,0,8" Padding="15" BorderBrush="WhiteSmoke" BorderThickness="1">
+                                <Grid>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold" Foreground="Black"/>
+
+                                    <Button Content="Trade Now →" 
+                                            Command="{Binding DataContext.OpenMarketCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding TradeUrl}" 
+                                            HorizontalAlignment="Right"
+                                            Background="Transparent"
+                                            Foreground="#28a745"
+                                            FontWeight="Bold"
+                                            BorderThickness="0"
+                                            Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
