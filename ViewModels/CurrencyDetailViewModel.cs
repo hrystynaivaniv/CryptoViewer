@@ -14,26 +14,26 @@ namespace CryptoViewer.ViewModels
         private readonly ICoinService _coinService;
         private PlotModel _chartModel;
         private ObservableCollection<MarketInfo> _markets;
+
+        public Currency Currency { get; }
+        public ICommand OpenMarketCommand { get; }
+        public ICommand BackCommand { get; }
+
         public ObservableCollection<MarketInfo> Markets
         {
             get => _markets;
             set => SetProperty(ref _markets, value);
         }
-        public Currency Currency { get; }
-        public ICommand BackCommand { get; }
-
         public PlotModel ChartModel
         {
             get => _chartModel;
             set => SetProperty(ref _chartModel, value);
         }
 
-
-        public ICommand OpenMarketCommand { get; }
         public string Name => Currency.Name;
         public string Symbol => Currency.Symbol?.ToUpper();
         public string PriceDisplay => $"{Currency.CurrentPrice:N2} $";
-        public string VolumeDisplay => $"Vol: {Currency.TotalVolume:N0} $";
+        public string VolumeDisplay => $"Volume: {Currency.TotalVolume:N0} $";
         public string ChangeDisplay => $"{Currency.PriceChange24h / 100:P2}"; 
         public string ChangeColor => Currency.PriceChange24h >= 0 ? "Green" : "Red";
 

@@ -15,7 +15,8 @@ namespace CryptoViewer.ViewModels
         private string _searchText = string.Empty;
         private object _currentViewModel;
         public ICommand OpenConverterCommand { get; }
-
+        public ICommand OpenCurrencyDetailCommand { get; }
+        public ICommand GoBackCommand { get; }
         public ObservableCollection<Currency> Currencies { get; } = new ObservableCollection<Currency>();
 
         public string SearchText
@@ -34,15 +35,13 @@ namespace CryptoViewer.ViewModels
             set => SetProperty(ref _currentViewModel, value);
         }
 
-        public ICommand OpenCurrencyDetailCommand { get; }
-        public ICommand GoBackCommand { get; }
 
         public MainViewModel(ICoinService coinService)
         {
             _coinService = coinService;
 
             OpenCurrencyDetailCommand = new RelayCommand<Currency>(OpenCurrencyDetail);
-            OpenConverterCommand = new RelayCommand<Currency>(_ => OpenConverter());
+            OpenConverterCommand = new RelayCommand<object>(_ => OpenConverter());
             GoBackCommand = new RelayCommand<object>(_ => ShowMainPage());
 
             CurrentViewModel = this;
