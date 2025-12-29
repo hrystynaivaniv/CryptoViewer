@@ -5,6 +5,7 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace CryptoViewer.ViewModels
 {
@@ -12,7 +13,12 @@ namespace CryptoViewer.ViewModels
     {
         private readonly ICoinService _coinService;
         private PlotModel _chartModel;
-
+        private ObservableCollection<MarketInfo> _markets;
+        public ObservableCollection<MarketInfo> Markets
+        {
+            get => _markets;
+            set => SetProperty(ref _markets, value);
+        }
         public Currency Currency { get; }
         public ICommand BackCommand { get; }
 
@@ -22,6 +28,8 @@ namespace CryptoViewer.ViewModels
             set => SetProperty(ref _chartModel, value);
         }
 
+
+        public ICommand OpenMarketCommand { get; }
         public string Name => Currency.Name;
         public string Symbol => Currency.Symbol?.ToUpper();
         public string PriceDisplay => $"{Currency.CurrentPrice:N2} $";
@@ -35,8 +43,23 @@ namespace CryptoViewer.ViewModels
             BackCommand = backCommand;
             _coinService = coinService;
 
+            OpenMarketCommand = new RelayCommand<string>(url =>
+            {
+                if (!string.IsNullOrEmpty(url))
+                {
+                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                }
+            });
+
             ChartModel = new PlotModel { Title = "Price History (7 Days)" };
             _ = LoadChartData();
+            _ = LoadMarketData();
+        }
+
+        private async Task LoadMarketData()
+        {
+            var marketList = await _coinService.GetCoinMarketsAsync(Currency.Id);
+            Markets = new ObservableCollection<MarketInfo>(marketList);
         }
 
         private async Task LoadChartData()

@@ -50,5 +50,32 @@ namespace CryptoViewer.Services
             var prices = doc.RootElement.GetProperty("prices").Deserialize<List<double[]>>();
             return prices;
         }
+
+      
+
+        public async Task<List<MarketInfo>> GetCoinMarketsAsync(string id)
+        {
+            try
+            {
+                var url = $"https://api.coingecko.com/api/v3/coins/{id}/tickers";
+                var json = await _httpClient.GetStringAsync(url);
+                using var doc = JsonDocument.Parse(json);
+
+                return doc.RootElement.GetProperty("tickers").EnumerateArray()
+                    .Select(t => new MarketInfo
+                    {
+                        Name = t.GetProperty("market").GetProperty("name").GetString(),
+                        TradeUrl = t.GetProperty("trade_url").GetString() 
+                    })
+                    .Where(m => !string.IsNullOrEmpty(m.TradeUrl)) 
+                    .DistinctBy(m => m.Name)
+                    .Take(5)
+                    .ToList();
+            }
+            catch
+            {
+                return new List<MarketInfo>();
+            }
+        }
     }
 }

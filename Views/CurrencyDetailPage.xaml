@@ -30,9 +30,36 @@
             <TextBlock Text="Price History (Last 7 Days)" Margin="0,20,0,5" FontWeight="Bold" FontSize="16"/>
             <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Height="300" Background="White">
                 <oxy:PlotView Model="{Binding ChartModel}" 
-                              Controller="{Binding ChartController}" 
                               Background="Transparent"/>
             </Border>
+
+            <TextBlock Text="Available Markets" Margin="0,20,0,5" FontWeight="Bold" FontSize="16"/>
+            <ItemsControl ItemsSource="{Binding Markets}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="5" Margin="0,2" Padding="10">
+                            <Grid>
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Medium"/>
+
+                                <Button Content="Go to Trade →" 
+                            Command="{Binding DataContext.OpenMarketCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding TradeUrl}" 
+                            HorizontalAlignment="Right"
+                            Foreground="Blue"
+                            Cursor="Hand"
+                            Background="Transparent"
+                            BorderThickness="0">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
         </StackPanel>
     </Grid>
